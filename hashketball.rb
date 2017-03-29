@@ -152,8 +152,49 @@ end
 
 
 def team_colors(team_name)
-    binding.pry
+    if game_hash[:home][:team_name] == team_name
+        game_hash[:home][:colors]
+    else
+        game_hash[:away][:colors]
+    end
 
 end
 
-team_colors("Brooklyn Nets")
+def team_names
+    teams = []
+    teams.push(game_hash[:home][:team_name])
+    teams.push(game_hash[:away][:team_name])
+    teams
+end
+
+def player_numbers(team_name)
+    numbers = []
+    if game_hash[:home][:team_name] == team_name
+        game_hash[:home][:players].each do |player, stats|
+            stats.each do |attribute, data|
+                if attribute == :number
+                    numbers.push(data)
+                end
+            end
+        end
+    else
+        game_hash[:away][:players].each do |players, stats|
+            stats.each do |attribute, data|
+                if attribute == :number
+                    numbers.push(data)
+                end
+            end
+        end
+    end
+numbers
+end
+
+def player_stats(name)
+    # binding.pry
+
+    if game_hash[:home][:players].keys().include? name.to_sym
+        game_hash[:home][:players][name.to_sym]
+    else
+        game_hash[:away][:players][name.to_sym]
+    end
+end
