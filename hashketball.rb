@@ -190,11 +190,43 @@ numbers
 end
 
 def player_stats(name)
-    # binding.pry
-
     if game_hash[:home][:players].keys().include? name.to_sym
         game_hash[:home][:players][name.to_sym]
     else
         game_hash[:away][:players][name.to_sym]
     end
 end
+
+def big_shoe_rebounds
+player_shoes = []
+homeNames = game_hash[:home][:players].keys()
+awayNames = game_hash[:away][:players].keys()
+
+    homeNames.each do |name|
+        shoe_size = game_hash[:home][:players][name][:shoe]
+        newHash = {name => shoe_size}
+        player_shoes << newHash
+    end
+
+    awayNames.each do |name|
+        shoe_size = game_hash[:away][:players][name][:shoe]
+        newHash = {name => shoe_size}
+        player_shoes << newHash
+    end
+
+    player_shoes = player_shoes.reduce Hash.new, :merge
+    max = player_shoes.values.max
+    biggest_shoe = player_shoes.select {|k, v| v == max}.keys.join(" ")
+
+     #BIGGEST SHOE IS NOW FOUND
+     if game_hash[:home][:players].include? biggest_shoe.to_sym
+         game_hash[:home][:players][biggest_shoe.to_sym][:rebounds]
+     else
+         game_hash[:away][:players][biggest_shoe.to_sym][:rebounds]
+     end
+
+    #  binding.pry
+
+end
+
+big_shoe_rebounds
