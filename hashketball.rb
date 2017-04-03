@@ -157,7 +157,6 @@ def team_colors(team_name)
     else
         game_hash[:away][:colors]
     end
-
 end
 
 def team_names
@@ -224,9 +223,102 @@ awayNames = game_hash[:away][:players].keys()
      else
          game_hash[:away][:players][biggest_shoe.to_sym][:rebounds]
      end
-
+     #
     #  binding.pry
 
 end
 
-big_shoe_rebounds
+def most_points_scored
+
+    player_points= []
+    homeNames = game_hash[:home][:players].keys()
+    awayNames = game_hash[:away][:players].keys()
+
+        homeNames.each do |name|
+            points_scored = game_hash[:home][:players][name][:points]
+            newHash = {name => points_scored}
+            player_points << newHash
+        end
+
+        awayNames.each do |name|
+            points_scored = game_hash[:away][:players][name][:points]
+            newHash = {name => points_scored}
+            player_points << newHash
+        end
+
+        player_points = player_points.reduce Hash.new, :merge
+        max = player_points.values.max
+        most_points = player_points.key(max)
+
+        most_points.to_s
+
+end
+
+def winning_team
+    brook = []
+    charl = []
+
+  game_hash[:home][:players].each do |player, stats|
+    brook << stats[:points]
+  end
+  game_hash[:away][:players].each do |player, stats|
+    charl << stats[:points]
+  end
+
+  brook = brook.inject(:+)
+  charl = charl.inject(:+)
+  # binding.pry
+
+  if brook > charl
+      game_hash[:home][:team_name]
+  else
+      game_hash[:away][:team_name]
+  end
+
+end
+
+def player_with_longest_name
+    names = []
+    namesArray = []
+
+    game_hash[:home][:players].each do |player, stats|
+    names << player
+  end
+  game_hash[:away][:players].each do |player, stats|
+    names << player
+  end
+
+  names.each do |name|
+    namesArray << name.to_s.split("").length
+  end
+
+  names[namesArray.index(namesArray.max)].to_s
+
+end
+
+def long_name_steals_a_ton?
+
+    mostSteals = []
+    game_hash[:home][:players].each do |players, stat|
+        mostSteals << stat[:steals]
+    end
+    game_hash[:away][:players].each do |players, stat|
+        mostSteals << stat[:steals]
+    end
+
+    stealCheck = mostSteals.max
+
+
+
+    playerSteals =
+    if game_hash.dig(:home, :players, player_with_longest_name.to_sym ,:steals) == nil
+        game_hash.dig(:away, :players,player_with_longest_name.to_sym ,:steals)
+    else
+      game_hash.dig(:home, :players,player_with_longest_name.to_sym ,:steals)
+    end
+
+    return true if stealCheck == playerSteals
+
+end
+
+# long_name_steals_a_ton
